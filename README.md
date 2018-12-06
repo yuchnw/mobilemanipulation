@@ -12,7 +12,7 @@ Given eight configurations indicating the relationship between end-effector, cub
 
 The output is written to a cvs file containing 13 attributes: **r11, r12, r13, r21, r22, r23, r31, r32, r33, px, py, pz, gripper state**
 
-![Tse](https://github.com/yuchnw/mobilemanipulation/blob/master/results/Tse.png)
+![Tse](https://github.com/yuchnw/mobilemanipulation/tree/master/results/Tse.png)
 
 ### Kinematics Simulator for youBot
 Given the current configuration of youBot (*Chassis phi, Chassis x, Chassis y, J1, J2, J3, J4, J5, W1, W2, W3, W4, Gripper*), joints speed and wheel speed, return the next configuration of the robot after a short time dt(*default as 0.01s*).
@@ -20,7 +20,7 @@ Given the current configuration of youBot (*Chassis phi, Chassis x, Chassis y, J
 ### Forward Control
 The feedback control of the the mobile manipulator is given by kinematic task-space feedforward plus feedback control law:
 
-![control](https://github.com/yuchnw/mobilemanipulation/blob/master/results/control_law.png)
+![control](https://github.com/yuchnw/mobilemanipulation/tree/master/results/control_law.png)
 
 * Given the current, next and actual end-effector configurations, PI controller gains, return the commanded end-effector twist ***V*** and the error list of each joint.
 * Given the joint angles, Body Jacobians and several other configurations, return the Jacobian of robot arm and base.
@@ -34,4 +34,4 @@ With the robot configuration return by the script, V-REP could successfully simu
 ### Error Plot
 By plotting out all six errors, it is clear that the the motion is smooth is smooth without any overshoot, also the settling time is short.
 
-![error](https://github.com/yuchnw/mobilemanipulation/blob/master/results/error_plots.png)
+![error](https://github.com/yuchnw/mobilemanipulation/tree/master/results/error_plots.png)
