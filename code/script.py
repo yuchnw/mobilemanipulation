@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-Created on Tue Oct 16 15:59:00 2018
+Created on Tue Nov 16 15:59:00 2018
 
 @author: yuchen
 """
@@ -103,6 +103,7 @@ def NextState(currentConfig,control,dt,maxSpeed,gripper):
 	dt: timestamp
 	maxSpeed: Maximum angular speed of the arm joints and the wheels
 	"""
+
 	phi,x,y,j1,j2,j3,j4,j5,w1,w2,w3,w4,crap = currentConfig[0]
 	j1dot,j2dot,j3dot,j4dot,j5dot,w1dot,w2dot,w3dot,w4dot = control[0]
 	Ts = np.array([[cos(phi), -sin(phi), 0, x],[sin(phi), cos(phi), 0, y],[0, 0, 0, 0.0963],[0, 0, 0, 1]])
@@ -116,6 +117,7 @@ def NextState(currentConfig,control,dt,maxSpeed,gripper):
 	xx = Tb[0][3]
 	yy = Tb[1][3]
 
+	""" Update new joint angles and wheel speeds """
 	jj1 = j1 + j1dot * dt
 	jj2 = j2 + j2dot * dt
 	jj3 = j3 + j3dot * dt
@@ -132,6 +134,11 @@ def NextState(currentConfig,control,dt,maxSpeed,gripper):
 	return phiphi,xx,yy,jj1,jj2,jj3,jj4,jj5,ww1,ww2,ww3,ww4,gripper
 
 def Convert(phi,x,y,j1,j2,j3,j4,j5):
+	"""
+	Given the current configurations of robot chassis and joints,
+	return the Jacobian matrices.
+	"""
+
 	thetalist = np.array([j1,j2,j3,j4,j5])
 	Tsb = np.array([[cos(phi), -sin(phi), 0, x],[sin(phi), cos(phi), 0, y],[0, 0, 1, 0.0963],[0, 0, 0, 1]])
 	Tb0 = np.array([[1, 0, 0, 0.1662],[0, 1, 0, 0],[0, 0, 1, 0.0026],[0, 0, 0, 1]])
@@ -144,7 +151,11 @@ def Convert(phi,x,y,j1,j2,j3,j4,j5):
 
 def FeedbackControl(Xd,Xd_next,X,Kp,Ki,dt,Ja,Jb):
 	"""
-
+	Xd: Current end-effector configuration
+	Xd_next: End-effector configuration at next timestamp
+	X: Current actual end-effector configuration(Tse)
+	Kp, Ki: PI controller gains
+	Ja, Jb: Jacobian matrices of robot arm and robot chassis
 	"""
 	global Integral
 	"""
@@ -162,6 +173,7 @@ def FeedbackControl(Xd,Xd_next,X,Kp,Ki,dt,Ja,Jb):
 	return v,Xerr
 
 def createT(a):
+	""" Helper function to parse an element of array list to an individual array """
 	output = np.array([[a[0],a[1],a[2],a[9]],[a[3],a[4],a[5],a[10]],[a[6],a[7],a[8],a[11]],[0,0,0,1]])
 	return output
 
@@ -182,6 +194,7 @@ def main():
 	k = 1
 	TrajectoryGenerator(Tse_i,Tsc_i,Tsc_f,Tce_g,Tce_s,k)
 
+	""" Initial parameters """
 	dt = 0.01
 	phi=-np.pi/5
 	x=0.1
@@ -200,6 +213,8 @@ def main():
 	tconfig = np.array([[phi,x,y,j1,j2,j3,j4,j5,w1,w2,w3,w4,0]])
 	result.append(tconfig[0])
 	maxSpeed = np.array([[1000,1000,1000,1000,1000,1000,1000,1000,1000]])
+
+	""" Loop through every line of trajectory to set up the chassis configurations and control parameters """
 	
 	for i in range(len(param)-1):
 		X,Jarm,Jbase = Convert(phi,x,y,j1,j2,j3,j4,j5)
@@ -219,7 +234,7 @@ def main():
 	np.savetxt("/home/yuchen/Documents/Fall2018/ME449/Project/Chassis.csv", result, delimiter=",")
 	np.savetxt("/home/yuchen/Documents/Fall2018/ME449/Project/Error.csv", error, delimiter=",")
 
-	# Plots
+	""" Generate Error Plots """
 	logging.info("Writing error plot data...")
 	t=np.arange(0,16.99,0.01)
 	plt.plot(t,error1,label='error1')
