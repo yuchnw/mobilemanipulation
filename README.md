@@ -34,4 +34,6 @@ With the robot configuration return by the script, V-REP could successfully simu
 ### Error Plot
 By plotting out all six errors, it is clear that the the motion is smooth is smooth without any overshoot, also the settling time is short.
 
-![error](https://github.com/yuchnw/mobilemanipulation/blob/master/results/error_plots.png)
+![error](https://github.com/yuchnw/mobilemanipulation/blob/master/results/best/error_plots.png)
+
+**The error plot shown above is the result for "best" version**

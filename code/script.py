@@ -10,6 +10,10 @@ import modern_robotics as mr
 import numpy as np
 from math import sin, cos
 import matplotlib.pyplot as plt
+import logging
+
+logging.basicConfig(filename = "runNewtask.log", level = logging.INFO, format = '%(asctime)s  %(processName)s %(name)s  %(message)s')
+logging.info("Running newTask version")
 
 l = 0.47/2
 r = 0.0475
@@ -162,9 +166,17 @@ def createT(a):
 	return output
 
 def main():
+	logging.info("Generating animation csv file...")
 	Tse_i = np.array([[0, 0, 1, 0],[0, 1, 0, 0],[-1, 0, 0, 0.5],[0, 0, 0, 1]])
+
+	""" Default positions """
 	Tsc_i = np.array([[1, 0, 0, 1],[0, 1, 0, 0],[0, 0, 1, 0],[0, 0, 0, 1]])
 	Tsc_f = np.array([[0, 1, 0, 0],[-1,0, 0,-1],[0, 0, 1, 0],[0, 0, 0, 1]])
+
+	""" New Task Positions """
+	# Tsc_i = np.array([[0, -1, 0, 1],[1, 0, 0, 1],[0, 0, 1, 0],[0, 0, 0, 1]])
+	# Tsc_f = np.array([[1, 0, 0, 2],[0,1, 0,0],[0, 0, 1, 0],[0, 0, 0, 1]])
+
 	Tce_g = np.array([[-0.5, 0, 0.8660254, 0.015],[0, 1, 0, 0],[-0.8660254,0, -0.5,0.02],[0, 0, 0, 1]])
 	Tce_s = np.array([[0, 0, 1, -0.3],[0, 1, 0, 0],[-1, 0, 0, 0.5],[0, 0, 0, 1]])
 	k = 1
@@ -208,6 +220,7 @@ def main():
 	np.savetxt("/home/yuchen/Documents/Fall2018/ME449/Project/Error.csv", error, delimiter=",")
 
 	# Plots
+	logging.info("Writing error plot data...")
 	t=np.arange(0,16.99,0.01)
 	plt.plot(t,error1,label='error1')
 	plt.plot(t,error2,label='error2')
@@ -218,6 +231,8 @@ def main():
 	plt.legend()
 	plt.title("Error Plot")
 	plt.show()
+
+	logging.info("Done")
 
 if __name__ == '__main__':
 	main()
