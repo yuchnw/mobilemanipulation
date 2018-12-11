@@ -25,6 +25,10 @@ The feedback control of the the mobile manipulator is given by kinematic task-sp
 * Given the current, next and actual end-effector configurations, PI controller gains, return the commanded end-effector twist ***V*** and the error list of each joint.
 * Given the joint angles, Body Jacobians and several other configurations, return the Jacobian of robot arm and base.
 
+## Instruction
+To execute the program, open up a terminal under the *Project* directory, and run
+>./script.py
+
 ## Result
 ### Working V-REP Simulation
 With the robot configuration return by the script, V-REP could successfully simulate the youBot moving to the cube, grabbing it and put it to another location and the movement is smooth enough.
